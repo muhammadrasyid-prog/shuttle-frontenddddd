@@ -1,0 +1,231 @@
+<div>
+  <app-header></app-header>
+
+
+  <h1 class="my-6 text-xl font-semibold uppercase">
+    School Admin list
+  </h1>
+
+  <div class="flex items-center my-4">
+    <form class="form relative">
+      <input
+        class="input w-72 rounded-full pr-8 px-4 py-2 text-sm bg-gray-100 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-500 transition-all duration-300 shadow-md"
+        placeholder="Search Item" required="" type="text" id="table-search" name="searchText" />
+      <button type="reset" class="absolute right-3 -translate-y-1/2 top-1/2 p-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </form>
+
+    <button (click)="openModalAdd()"
+      class="flex items-center gap-x-1 ml-auto bg-[#3A3A3A] hover:bg-neutral-600 text-white font-medium px-4 py-2 rounded-md border shadow hover:shadow-md">
+      <div>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="m12.03 5-.018 14"></path>
+          <path d="M5 12h14"></path>
+        </svg>
+      </div>
+      <p>Add School Admin</p>
+    </button>
+  </div>
+
+
+  <div class="w-fit bg-gray-50 px-4 py-2 text-sm font-medium border rounded-lg shadow-md">
+    {{ startRow }} - {{ endRow }} of {{ totalRows }} item(s)
+  </div>
+
+  <div class="w-full h-[80vh] my-4">
+    <ag-grid-angular style="width: 100%; height: 100%; overflow-x: scroll;" [class]="themeClass"
+      [rowData]="rowListAllSchool" [columnDefs]="colHeaderListAllSchool" [defaultColDef]="defaultColDef"
+      [gridOptions]="gridOptions" [pagination]="true" [paginationPageSize]="10"
+      (firstDataRendered)="totalRowCount($event)"></ag-grid-angular>
+  </div>
+
+  <!-- Modal Add Driver -->
+  <div *ngIf="isModalAddOpen" tabindex="-1" (click)="closeModalAdd()"
+    class="fixed inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-50 outline-none focus:outline-none z-50">
+    <div (click)="$event.stopPropagation()" class="relative w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow-lg">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-5 border-b rounded-t">
+          <h3 class="text-xl font-semibold text-gray-900">
+            Add New Driver Account
+          </h3>
+          <button (click)="closeModalAdd()"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 space-y-6">
+          <form class="space-y-4">
+            <div>
+              <label for="name" class="block mb-2 text-sm font-medium text-gray-900">
+                Full Name
+              </label>
+              <input type="text" id="name" name="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Enter driver full name" required>
+            </div>
+
+            <div>
+              <label for="email" class="block mb-2 text-sm font-medium text-gray-900">
+                Email
+              </label>
+              <input type="email" id="email" name="email"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Enter driver email address" required>
+            </div>
+
+            <div>
+              <label for="phone" class="block mb-2 text-sm font-medium text-gray-900">
+                Phone Number
+              </label>
+              <input type="tel" id="phone" name="phone"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Enter phone number" required>
+            </div>
+
+            <div>
+              <label for="license" class="block mb-2 text-sm font-medium text-gray-900">
+                Driver License Number
+              </label>
+              <input type="text" id="license" name="license"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Enter driver license number" required>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex items-center justify-end p-6 border-t border-gray-200 rounded-b">
+              <button type="button" (click)="closeModalAdd()"
+                class="text-gray-500 bg-white hover:bg-gray-100 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                Cancel
+              </button>
+              <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-3">
+                Add Driver
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="isModalEditOpen" tabindex="-1" (click)="closeModalEdit()" 
+  class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+  <div (click)="$event.stopPropagation()" 
+    class="relative w-full max-w-xl md:max-w-2xl bg-white rounded-lg shadow dark:bg-gray-700 max-h-[90vh] overflow-y-auto mx-4 md:mx-0">
+    
+    <!-- Modal header -->
+    <div class="sticky top-0 flex items-center justify-between p-4 bg-white border-b rounded-t dark:bg-gray-700">
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit</h3>
+      <button (click)="closeModalEdit()" 
+        class="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13" />
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="p-4">
+      <div class="flex items-center mb-4">
+        <div class="bg-purple-500 rounded-full text-white font-bold px-3 py-2 mr-4">CS</div>
+        <h2 class="text-gray-800 font-bold">Christopher Smallwood</h2>
+      </div>
+      <div class="mb-4">
+        <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">Registered</span>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-gray-500 font-medium">
+          The lower and upper lips have cancer sores 
+          <button class="text-blue-500 font-medium ml-2">Edit</button>
+        </p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 mb-4">
+        <div>
+          <h3 class="text-gray-500 font-medium mb-2">Time Slot</h3>
+          <button class="text-blue-500 font-medium">Extend time</button>
+        </div>
+        <div>
+          <h3 class="text-gray-500 font-medium mb-2">TREATMENT</h3>
+          <p class="text-gray-800 font-medium">Tooth filling</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 font-medium mb-2">DATE AND TIME</h3>
+          <p class="text-gray-800 font-medium">Fri, 24 Jun 02:00-03:00 PM</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="text-gray-500 font-medium mb-2">DENTIST</h3>
+          <p class="text-gray-800 font-medium">Drg Putri Larasati</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 font-medium mb-2">Payment</h3>
+          <p class="text-red-500 font-medium">UNPAID</p>
+          <button class="text-blue-500 font-medium">Send Reminder</button>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-gray-500 font-medium mb-2">General Info</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <p class="text-gray-500 font-medium">FULL NAME</p>
+            <p class="text-gray-800 font-medium">Christopher C. Smallwood</p>
+          </div>
+          <div>
+            <p class="text-gray-500 font-medium">PHONE NUMBER</p>
+            <p class="text-gray-800 font-medium">+1 (409)-832-3913</p>
+          </div>
+          <div>
+            <p class="text-gray-500 font-medium">AGE</p>
+            <p class="text-gray-800 font-medium">Sidoarjo, January 21 2002</p>
+          </div>
+          <div>
+            <p class="text-gray-500 font-medium">EMAIL</p>
+            <p class="text-gray-800 font-medium">ChristopherW12mail.com</p>
+          </div>
+          <div>
+            <p class="text-gray-500 font-medium">GENDER</p>
+            <p class="text-gray-800 font-medium">Male</p>
+          </div>
+          <div>
+            <p class="text-gray-500 font-medium">ADDRESS</p>
+            <p class="text-gray-800 font-medium">4337 Lynn Ogden Lane, Beaumont, TX 77701</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal footer -->
+    <div class="flex items-center p-4 border-t border-gray-200 dark:border-gray-600">
+      <button type="button" 
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+        Draft
+      </button>
+      <button type="button" 
+        class="py-2.5 px-5 ml-3 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+</div>
