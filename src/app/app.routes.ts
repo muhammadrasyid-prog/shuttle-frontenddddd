@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardAdminComponent } from './content/Admin/dashboard/dashboard.component';
 import { FullComponent } from './layouts/full/full.component';
+import { ProfileComponent } from './profile/profile.component';
 import { ProfileAdminComponent } from './content/Admin/profile/profile.component';
 import { AuthGuard } from './guard/auth-guard.guard';
 import { LoginGuard } from './guard/login.guard';
@@ -36,7 +37,7 @@ const superAdminChildrenRoutes: Route[] = [
   },
   {
     path: 'profile',
-    component: ProfileAdminComponent,
+    component: ProfileComponent,
   },
   {
     path: 'schools',

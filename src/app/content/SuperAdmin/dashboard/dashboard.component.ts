@@ -14,6 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class DashboardSuperAdminComponent implements OnInit {
 
   totalAdmin: number = 0;
+  totalDriver: number = 0;
 
   constructor(
     private cookieService: CookieService,
@@ -24,6 +25,7 @@ export class DashboardSuperAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllAdmin()
+    this.getAllDriver()
   }
 
   getAllAdmin() {
@@ -39,6 +41,22 @@ export class DashboardSuperAdminComponent implements OnInit {
       .catch((error) => {
         console.error('Error fetching data:', error);
         this.totalAdmin = 0
+      });
+  }
+
+  getAllDriver() {
+    axios
+      .get(`${this.apiUrl}/api/superadmin/user/driver/all`, {
+        headers: {
+          Authorization: `${this.cookieService.get('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        this.totalDriver = response.data.length || 0;
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        this.totalDriver = 0
       });
   }
 }

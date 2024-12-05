@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { ColDef, ICellRendererParams } from 'ag-grid-community';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 import axios from 'axios';
 import { CookieService } from 'ngx-cookie-service';
 import { HeaderComponent } from '../../../navigations/header/header.component';
@@ -28,11 +30,27 @@ interface Detail {
 @Component({
   selector: 'app-drivers',
   standalone: true,
-  imports: [CommonModule, AgGridAngular, HeaderComponent],
+  imports: [CommonModule, AgGridAngular, FormsModule, HeaderComponent],
   templateUrl: './drivers.component.html',
   styleUrl: './drivers.component.css'
 })
 export class DriversComponent implements OnInit {
+  id: string = '';
+  first_name: string = '';
+  last_name: string = '';
+  gender: string = '';
+  email: string = '';
+  password: string = '';
+  role: string = '';
+  role_code: string = '';
+  phone: string = '';
+  address: string = '';
+  status: string = '';
+  details: Detail = {
+    vehicle_id: '',
+    license_number: '',
+  };
+
   totalRows: number = 0;
   startRow: number = 1;
   endRow: number = 10;
@@ -51,7 +69,7 @@ export class DriversComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllSuperadmin();
+    this.getAllDriver();
   }
 
   themeClass = 'ag-theme-quartz';
@@ -125,7 +143,7 @@ export class DriversComponent implements OnInit {
     event.api.refreshCells();
   }
 
-  getAllSuperadmin() {
+  getAllDriver() {
     axios
       .get(`${this.apiUrl}/api/superadmin/user/driver/all`, {
         headers: {
@@ -142,11 +160,110 @@ export class DriversComponent implements OnInit {
       });
   }
 
+  fetchDataDriver(): void {
+
+  }
+
   openModalAdd() {
+    this.first_name = '';
+    this.last_name = '';
+    this.gender = '';
+    this.email = '';
+    this.password = '';
+    this.role = '';
+    this.role_code = '';
+    this.phone = '';
+    this.address = '';
+    this.status = '';
+    this.details.vehicle_id = '';
+    this.details.license_number = '';
+    this.cdRef.detectChanges();
     this.isModalAddOpen = true;
   }
 
   closeModalAdd() {
+    this.isModalAddOpen = false;
+    this.cdRef.detectChanges();
+  }
+
+  addDriver() {
+    const token = this.cookieService.get('userToken');
+
+    axios
+      .post(
+        `${this.apiUrl}/api/school/user/driver/add`,
+        {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          email: this.email,
+          password: this.password,
+          role: this.role,
+          role_code: this.role_code,
+          phone: this.phone,
+          address: this.address,
+          status: this.status,
+          details: {
+            vehicle_id: this.details.vehicle_id,
+            license_number: this.details.license_number,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data.message);
+        this.fetchDataDriver();
+        Swal.fire({
+          title: 'Success',
+          text: response.data.message,
+          icon: 'success',
+          timer: 2000,
+          timerProgressBar: true,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        this.first_name = '';
+        this.last_name = '';
+        this.email = '';
+        this.password = '';
+        this.role = '';
+        this.role_code = '';
+        this.phone = '';
+        this.address = '';
+        this.status = '';
+        this.details.vehicle_id = '';
+        this.details.license_number = '';
+      })
+      .catch((error) => {
+        if (
+          error.response.status === 400 ||
+          error.response.status === 422 ||
+          error.response.status === 500
+        ) {
+          Swal.fire({
+            title: 'Error',
+            text: error.response.data.message,
+            icon: 'error',
+            timer: 2000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'Terjadi kesalahan',
+            icon: 'error',
+            timer: 2000,
+            timerProgressBar: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+          });
+        }
+      });
     this.isModalAddOpen = false;
   }
 

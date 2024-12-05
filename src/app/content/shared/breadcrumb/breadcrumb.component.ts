@@ -12,20 +12,32 @@ import { filter } from 'rxjs/operators';
   styleUrl: './breadcrumb.component.css',
 })
 export class BreadcrumbComponent {
-  breadcrumbs: Array<{ label: string; url: string }> = [];
+  // breadcrumbs: Array<{ label: string; url: string }> = [];
 
-  constructor(
-    private breadcrumbService: BreadcrumbService,
-    private router: Router,
-  ) {}
+  // constructor(
+  //   private breadcrumbService: BreadcrumbService,
+  //   private router: Router,
+  // ) {}
 
+  breadcrumbs: any;
+  baseURL: string = '';
+
+  constructor(private breadcrumbService: BreadcrumbService) {}
   ngOnInit(): void {
-    this.breadcrumbs = this.breadcrumbService.breadcrumbs;
-
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.breadcrumbs = this.breadcrumbService.breadcrumbs;
-      });
+    this.breadcrumbService.verifyTokenAndSetRole().then(() => {
+      // Setelah role_code diambil, set baseURL dan breadcrumbs
+      this.baseURL = this.breadcrumbService.getBaseURLForCurrentRole();
+      this.breadcrumbs = this.breadcrumbService.breadcrumbs$;
+    });
   }
+  // ngOnInit(): void {
+  //   this.breadcrumbs = this.breadcrumbService.breadcrumbs;
+
+  //   this.router.events
+  //     .pipe(filter((event) => event instanceof NavigationEnd))
+  //     .subscribe(() => {
+  //       this.breadcrumbs = this.breadcrumbService.breadcrumbs;
+  //     });
+  // }
+
 }

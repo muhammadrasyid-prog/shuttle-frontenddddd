@@ -1,4 +1,4 @@
-<nav aria-label="breadcrumb" class="w-full">
+<!-- <nav aria-label="breadcrumb" class="w-full">
   <ol class="flex w-fit flex-wrap items-center rounded-md bg-slate-50 px-4 py-2">
     <ng-container *ngFor="let breadcrumb of breadcrumbs; let last = last">
       <ng-container *ngIf="!last">
@@ -20,5 +20,47 @@
         </li>
       </ng-container>
     </ng-container>
+  </ol>
+</nav> -->
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <!-- Ikon Home -->
+    <li class="breadcrumb-item">
+      <a [routerLink]="baseURL" class="breadcrumb-icon">
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          stroke="#000000"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3.75 9.938V21a.75.75 0 0 0 .75.75H9v-6.375a1.125 1.125 0 0 1 1.125-1.125h3.75A1.125 1.125 0 0 1 15 15.375v6.375h4.5a.75.75 0 0 0 .75-.75V9.937"
+          ></path>
+          <path
+            d="m22.5 12-9.99-9.563c-.234-.248-.782-.25-1.02 0L1.5 11.999"
+          ></path>
+          <path d="M18.75 8.39V3H16.5v3.234"></path>
+        </svg>
+      </a>
+    </li>
+
+    <!-- Breadcrumb Items -->
+    <li
+      class="breadcrumb-item"
+      *ngFor="let breadcrumb of breadcrumbs | async; let isLast = last"
+    >
+      <a
+        *ngIf="!isLast"
+        [routerLink]="breadcrumb.url"
+        >{{ breadcrumb.label }}</a
+      >
+      <span *ngIf="isLast">{{ breadcrumb.label }}</span>
+    </li>
   </ol>
 </nav>

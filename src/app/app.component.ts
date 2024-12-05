@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
   private async startWebSocket() {
     const apiUrl = environment.apiUrl;
     const ws = environment.ws;
-    await this.webSocketService.initializeWebSocket(apiUrl, ws);
+    // await this.webSocketService.initializeWebSocket(apiUrl, ws);
   }
 
   public isSpinnerVisible = false;
